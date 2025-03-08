@@ -4,19 +4,6 @@ defaults:  # Workflow Level defaults
   run:
     shell: bash
 jobs:
-  show-working-directory-linux:
-    runs-on: windows-latest
-    steps:
-      - name: 현재 워킹디렉토리에서 파일 목록 보기
-        run: |
-          uname -a
-          ls -a
-          echo $GITHUB_SHA
-          echo $GITHUB_REPOSITORY
-          echo $GITHUB_WORKSPACE
-      - name: 워킹 디렉토리 변경
-        working-directory: /home/runner
-        run: pwd
   show-working-directory-win:
     runs-on: windows-latest
     defaults:  # Job Level Defaults
@@ -35,3 +22,18 @@ jobs:
         run: |
           import platform 
           print(platform.processor())
+jobs:
+  show-directory:
+    runs-on: windows-latest
+    steps:
+      - name: 현재 워킹디렉토리에서 파일 목록 보기
+        run: |
+          echo $GITHUB_SHA
+          echo $GITHUB_REPOSITORY
+          echo $GITHUB_WORKSPACE
+      - name: 워킹 디렉토리 변경
+        working-directory: /home/runner
+        run: |
+          mkdir /home/runner/test_folder
+          touch /home/runner/test_folder/sample.txt 
+          cat /home/runner/test_folder/sample.txt 
