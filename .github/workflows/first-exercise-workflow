@@ -11,4 +11,4 @@ jobs:
       - name: multiple line cmd
         run: |
           python --version
-          pip --version
+          pip --version 
