@@ -27,7 +27,6 @@ jobs:
         run: |
           console.log(process.version)
 
-jobs:
   directory-navigation:
     runs-on: ubuntu-latest
     steps:
