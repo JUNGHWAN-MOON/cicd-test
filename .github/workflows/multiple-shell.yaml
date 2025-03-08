@@ -1,39 +1,42 @@
-name: Change Working Dir & Shell
+name: Multi-Shell Environment Exercise
 on: [push]
-defaults:  # Workflow Level defaults
-  run:
-    shell: bash
+
 jobs:
-  show-shell-change-win:
+  multi-shell-job:
     runs-on: windows-latest
-    defaults:  # Job Level Defaults
-      run:
+    steps:
+      - name: Bash - System Information
+        shell: bash
+        run: uname -a
+        
+      - name: PowerShell - Computer Information
         shell: pwsh
-    steps:
-      - name: 현재 워킹디렉토리에서 파일 목록 보기
         run: |
-          Get-Location
-          dir
-          echo $env:GITHUB_SHA
-          echo $env:GITHUB_REPOSITORY
-          echo $env:GITHUB_WORKSPACE
-      - name: 파이썬 쉘
-        shell: python  # Step Level Default Shell
+          Get-ComputerInfo
+          # $PSVersionTable
+          # Get-Host | Select-Object Version
+        
+      - name: Python - Version Information
+        shell: python
         run: |
-          import platform 
-          print(platform.processor())
+          import sys
+          print(sys.version)
+          
+      - name: Node.js - Version Information
+        shell: node {0}
+        run: |
+          console.log(process.version)
+
 jobs:
-  show-working-directory-win:
-    runs-on: windows-latest
+  directory-navigation:
+    runs-on: ubuntu-latest
     steps:
-      - name: 현재 워킹디렉토리에서 파일 목록 보기
-        run: |
-          echo $GITHUB_SHA
-          echo $GITHUB_REPOSITORY
-          echo $GITHUB_WORKSPACE
-      - name: 워킹 디렉토리 변경
-        working-directory: /home/runner
-        run: |
-          mkdir /home/runner/test_folder
-          touch /home/runner/test_folder/sample.txt 
-          cat /home/runner/test_folder/sample.txt 
+      - name: Create test_folder in /home/runner
+        run: mkdir -p /home/runner/test_folder
+        
+      - name: Create sample.txt file
+        run: echo "This is a sample text file created by GitHub Actions" > /home/runner/test_folder/sample.txt
+        
+      - name: Check file content
+        working-directory: /home/runner/test_folder
+        run: cat sample.txt
